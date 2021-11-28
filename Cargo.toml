@@ -1,0 +1,11 @@
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+lto = "fat"
+opt-level = 3
+codegen-units = 1
+panic = "abort"
+
+[workspace]
+members = []
