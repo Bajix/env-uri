@@ -1,0 +1,20 @@
+[package]
+name = "derive-env-url"
+authors = ["Thomas Sieverding <Thomas@bajix.com>"]
+edition = "2021"
+version = "1.0.0"
+description = "Derives for env-url"
+readme = "../../README.md"
+license = "MIT"
+repository = "https://github.com/Bajix/env-url/"
+
+[lib]
+doctest = false
+proc-macro = true
+
+[dependencies]
+darling = "0.13.0"
+proc-macro2 = "1.0.32"
+quote = "1.0.10"
+syn = { version = "1.0.82", features = [] }
+url = "2.2.2"

@@ -8,4 +8,7 @@ codegen-units = 1
 panic = "abort"
 
 [workspace]
-members = []
+members = [
+  "crates/derive-env-url",
+  "crates/env-url"
+]
