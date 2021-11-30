@@ -46,6 +46,8 @@ pub fn derive_service_uri(input: proc_macro::TokenStream) -> proc_macro::TokenSt
 
   let prefixed_url_env_key = format!("{}_URL_ENV", env_prefix);
   let prefixed_url_key = format!("{}_URL", env_prefix);
+  let prefixed_scheme_env_key = format!("{}_SCHEMA_ENV", env_prefix);
+  let prefixed_scheme_key = format!("{}_SCHEMA_ENV", env_prefix);
   let prefixed_host_env_key = format!("{}_HOST_ENV", env_prefix);
   let prefixed_host_key = format!("{}_HOST", env_prefix);
   let prefixed_port_env_key = format!("{}_PORT_ENV", env_prefix);
@@ -59,7 +61,7 @@ pub fn derive_service_uri(input: proc_macro::TokenStream) -> proc_macro::TokenSt
   let prefixed_password_env_key = format!("{}_PASSWORD_ENV", env_prefix);
   let prefixed_password_key = format!("{}_PASSWORD", env_prefix);
 
-  let scheme = url.scheme();
+  let default_scheme = url.scheme();
   let default_host = url.host_str().unwrap();
   let default_port = match url.port() {
     Some(port) => port.to_string(),
@@ -80,6 +82,13 @@ pub fn derive_service_uri(input: proc_macro::TokenStream) -> proc_macro::TokenSt
         let service_url_env = std::env::var(#prefixed_url_env_key).unwrap_or_else(|_| String::from(#prefixed_url_key));
 
         let service_url = std::env::var(service_url_env).unwrap_or_else(|_| {
+          let scheme = {
+            let host_env =
+              std::env::var(#prefixed_scheme_env_key).unwrap_or_else(|_| String::from(#prefixed_scheme_key));
+
+            std::env::var(host_env).unwrap_or_else(|_| String::from(#default_scheme))
+          };
+
           let host = {
             let host_env =
               std::env::var(#prefixed_host_env_key).unwrap_or_else(|_| String::from(#prefixed_host_key));
@@ -120,14 +129,14 @@ pub fn derive_service_uri(input: proc_macro::TokenStream) -> proc_macro::TokenSt
           match (std::env::var(password_env), query.is_empty()) {
             (Ok(password), true) =>  format!(
               "{}://{}:{}@{}:{}{}",
-              #scheme, username, password, host, port, path
+              scheme, username, password, host, port, path
             ),
             (Ok(password), false) => format!(
               "{}://{}:{}@{}:{}{}?{}",
-              #scheme, username, password, host, port, path, query
+              scheme, username, password, host, port, path, query
             ),
-            (Err(_), true) => format!("{}://{}:{}{}", #scheme, host, port, path),
-            (Err(_), false) => format!("{}://{}:{}{}?{}", #scheme, host, port, path, query)
+            (Err(_), true) => format!("{}://{}:{}{}", scheme, host, port, path),
+            (Err(_), false) => format!("{}://{}:{}{}?{}", scheme, host, port, path, query)
           }
 
         });

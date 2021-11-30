@@ -2,7 +2,7 @@
 name = "derive-env-url"
 authors = ["Thomas Sieverding <Thomas@bajix.com>"]
 edition = "2021"
-version = "1.0.0"
+version = "1.0.1"
 description = "Derives for env-url"
 readme = "../../README.md"
 license = "MIT"

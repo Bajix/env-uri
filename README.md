@@ -12,6 +12,8 @@ Env-composable service urls complete with key overrides as to facilitate maximum
  | -----------------------:|:---------------------------------------------------------:|
  | {PREFIX}_URL            | set service url, disregarding other overrides             |
  | {PREFIX}_URL_ENV        | override `{PREFIX}_URL` env mapping                       |
+ | {PREFIX}_SCHEME         | set url scheme component                                  |
+ | {PREFIX}_SCHEME_ENV     | override `{PREFIX}_SCHEME` env mapping                    |
  | {PREFIX}_HOST           | set url host component                                    |
  | {PREFIX}_HOST_ENV       | override `{PREFIX}_HOST` env mapping                      |
  | {PREFIX}_PATH           | set url path component                                    |

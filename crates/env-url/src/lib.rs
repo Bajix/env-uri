@@ -7,8 +7,8 @@
 //! | -----------------------:|:---------------------------------------------------------:|
 //! | {PREFIX}_URL            | set service url, disregarding other overrides             |
 //! | {PREFIX}_URL_ENV        | override `{PREFIX}_URL` env mapping                       |
-//! | {PREFIX}_HOST           | set url host component                                    |
-//! | {PREFIX}_HOST_ENV       | override `{PREFIX}_HOST` env mapping                      |
+//! | {PREFIX}_SCHEME         | set url scheme component                                  |
+//! | {PREFIX}_SCHEME_ENV     | override `{PREFIX}_SCHEME` env mapping                    |
 //! | {PREFIX}_PATH           | set url path component                                    |
 //! | {PREFIX}_PATH_ENV       | override `{PREFIX}_PATH` env mapping                      |
 //! | {PREFIX}_QUERY          | set url query component                                   |
@@ -34,7 +34,6 @@
 #[doc(hidden)]
 pub extern crate url;
 
-#[allow(rustdoc::private_intra_doc_links)]
 extern crate self as env_url;
 
 pub use derive_env_url::*;
