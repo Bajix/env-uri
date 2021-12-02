@@ -141,6 +141,8 @@ pub fn derive_service_uri(input: proc_macro::TokenStream) -> proc_macro::TokenSt
 
         });
 
+        env_url::log::info!("{} Service ENV URL: {}", std::any::type_name::<Self>(), &service_url);
+
         env_url::Url::parse(&service_url)
       }
     }

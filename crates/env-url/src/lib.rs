@@ -34,6 +34,9 @@
 #[doc(hidden)]
 pub extern crate url;
 
+#[doc(hidden)]
+pub extern crate log;
+
 extern crate self as env_url;
 
 pub use derive_env_url::*;
@@ -43,11 +46,28 @@ pub trait ServiceURL {
 }
 
 #[cfg(test)]
+#[ctor::ctor]
+fn setup_test_env() {
+  env_logger::init();
+  std::env::remove_var("REDIS_URL");
+  std::env::remove_var("REDIS_URL_ENV");
+  std::env::remove_var("REDIS_SCHEME");
+  std::env::remove_var("REDIS_SCHEME_ENV");
+  std::env::remove_var("REDIS_PATH");
+  std::env::remove_var("REDIS_PATH_ENV");
+  std::env::remove_var("REDIS_QUERY");
+  std::env::remove_var("REDIS_QUERY_ENV");
+  std::env::remove_var("REDIS_USERNAME");
+  std::env::remove_var("REDIS_USERNAME_ENV");
+  std::env::remove_var("REDIS_PASSWORD");
+  std::env::remove_var("REDIS_PASSWORD_ENV");
+}
+#[cfg(test)]
 mod tests {
   use env_url::*;
 
   #[derive(EnvURL)]
-  #[env_url(env_prefix = "TEST_REDIS", default = "redis://127.0.0.1:6379")]
+  #[env_url(env_prefix = "REDIS", default = "redis://127.0.0.1:6379")]
   struct RedisDB;
 
   #[test]
