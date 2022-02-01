@@ -34,9 +34,6 @@
 #[doc(hidden)]
 pub extern crate url;
 
-#[doc(hidden)]
-pub extern crate log;
-
 extern crate self as env_url;
 
 pub use derive_env_url::*;
@@ -48,7 +45,6 @@ pub trait ServiceURL {
 #[cfg(test)]
 #[ctor::ctor]
 fn setup_test_env() {
-  env_logger::init();
   std::env::remove_var("REDIS_URL");
   std::env::remove_var("REDIS_URL_ENV");
   std::env::remove_var("REDIS_SCHEME");
