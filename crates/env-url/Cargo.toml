@@ -16,5 +16,5 @@ derive-env-url = { version = "1.0.4", path = "../derive-env-url" }
 url = "2.2.2"
 
 [dev-dependencies]
-ctor = "0.1.21"
+ctor = "0.1.22"
 

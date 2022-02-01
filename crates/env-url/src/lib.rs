@@ -13,10 +13,8 @@
 //! | {PREFIX}_PATH_ENV       | override `{PREFIX}_PATH` env mapping                      |
 //! | {PREFIX}_QUERY          | set url query component                                   |
 //! | {PREFIX}_QUERY_ENV      | override `{PREFIX}_QUERY` env mapping                     |
-//! | {PREFIX}_USERNAME       | set url username component (if password set)              |
-//! | {PREFIX}_USERNAME_ENV   | override `{PREFIX}_USERNAME` env mapping                  |
-//! | {PREFIX}_PASSWORD       | set url password (username as "default" if empty)         |
-//! | {PREFIX}_PASSWORD_ENV   | override `{PREFIX}_PASSWORD` env mapping                  |
+//! | {PREFIX}_USERINFO       | set url userinfo component                                |
+//! | {PREFIX}_USERINFO_ENV   | override `{PREFIX}_USERINFO` env mapping                  |
 //!
 //! ## Example
 //!
@@ -53,10 +51,8 @@ fn setup_test_env() {
   std::env::remove_var("REDIS_PATH_ENV");
   std::env::remove_var("REDIS_QUERY");
   std::env::remove_var("REDIS_QUERY_ENV");
-  std::env::remove_var("REDIS_USERNAME");
-  std::env::remove_var("REDIS_USERNAME_ENV");
-  std::env::remove_var("REDIS_PASSWORD");
-  std::env::remove_var("REDIS_PASSWORD_ENV");
+  std::env::remove_var("REDIS_USERINFO");
+  std::env::remove_var("REDIS_USERINFO_ENV");
 }
 #[cfg(test)]
 mod tests {
@@ -67,9 +63,11 @@ mod tests {
   struct RedisDB;
 
   #[test]
-  fn it_creates_url() {
-    let url = RedisDB::service_url().unwrap();
+  fn it_creates_url() -> Result<(), ParseError> {
+    let url = RedisDB::service_url()?;
 
     assert_eq!(url.as_str(), "redis://127.0.0.1:6379");
+
+    Ok(())
   }
 }

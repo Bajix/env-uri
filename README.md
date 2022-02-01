@@ -20,10 +20,8 @@ Env-composable service urls complete with key overrides as to facilitate maximum
  | {PREFIX}_PATH_ENV       | override `{PREFIX}_PATH` env mapping                      |
  | {PREFIX}_QUERY          | set url query component                                   |
  | {PREFIX}_QUERY_ENV      | override `{PREFIX}_QUERY` env mapping                     |
- | {PREFIX}_USERNAME       | set url username component (if password set)              |
- | {PREFIX}_USERNAME_ENV   | override `{PREFIX}_USERNAME` env mapping                  |
- | {PREFIX}_PASSWORD       | set url password (username as "default" if empty)         |
- | {PREFIX}_PASSWORD_ENV   | override `{PREFIX}_PASSWORD` env mapping                  |
+ | {PREFIX}_USERINFO       | set url userinfo component                                |
+ | {PREFIX}_USERINFO_ENV   | override `{PREFIX}_USERINFO` env mapping                  |
 
  ## Example
 
@@ -43,6 +41,6 @@ Env-composable service urls complete with key overrides as to facilitate maximum
 As kubernetes can set services to env variables for service discovery, it's very useful to be able to override the env mappings like so
 
 ```
-REDIS_HOST_ENV: MONOLITH_STAGE_REDIS_MASTER_PORT_6379_TCP_ADDR
-REDIS_PORT_ENV: MONOLITH_STAGE_REDIS_MASTER_SERVICE_PORT_REDIS
+REDIS_HOST_ENV: STAGE_REDIS_MASTER_PORT_6379_TCP_ADDR
+REDIS_PORT_ENV: STAGE_REDIS_MASTER_SERVICE_PORT_REDIS
 ```

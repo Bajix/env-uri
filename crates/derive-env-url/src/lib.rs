@@ -56,10 +56,8 @@ pub fn derive_service_uri(input: proc_macro::TokenStream) -> proc_macro::TokenSt
   let prefixed_path_key = format!("{}_PATH", env_prefix);
   let prefixed_query_env_key = format!("{}_QUERY_ENV", env_prefix);
   let prefixed_query_key = format!("{}_QUERY", env_prefix);
-  let prefixed_username_env_key = format!("{}_USERNAME_ENV", env_prefix);
-  let prefixed_username_key = format!("{}_USERNAME", env_prefix);
-  let prefixed_password_env_key = format!("{}_PASSWORD_ENV", env_prefix);
-  let prefixed_password_key = format!("{}_PASSWORD", env_prefix);
+  let prefixed_userinfo_env_key = format!("{}_USERINFO_ENV", env_prefix);
+  let prefixed_userinfo_key = format!("{}_USERINFO", env_prefix);
 
   let default_scheme = url.scheme();
   let default_host = url.host_str().unwrap();
@@ -70,10 +68,10 @@ pub fn derive_service_uri(input: proc_macro::TokenStream) -> proc_macro::TokenSt
 
   let default_path = url.path();
   let default_query = url.query().unwrap_or("");
-  let mut default_username = url.username();
 
-  if default_username.is_empty() {
-    default_username = "default";
+  let default_userinfo = match url.password() {
+    Some(password) => format!("{}:{}", url.username(), password),
+    None => String::from(url.username()),
   };
 
   let expanded = quote! {
@@ -109,15 +107,12 @@ pub fn derive_service_uri(input: proc_macro::TokenStream) -> proc_macro::TokenSt
             std::env::var(path_env).unwrap_or_else(|_| String::from(#default_path))
           };
 
-          let username = {
-            let username_env =
-              std::env::var(#prefixed_username_env_key).unwrap_or_else(|_| String::from(#prefixed_username_key));
+          let userinfo = {
+            let userinfo_env =
+              std::env::var(#prefixed_userinfo_env_key).unwrap_or_else(|_| String::from(#prefixed_userinfo_key));
 
-            std::env::var(username_env).unwrap_or_else(|_| String::from(#default_username))
+            std::env::var(userinfo_env).unwrap_or_else(|_| String::from(#default_userinfo))
           };
-
-          let password_env =
-            std::env::var(#prefixed_password_env_key).unwrap_or_else(|_| String::from(#prefixed_password_key));
 
           let query = {
             let query_env =
@@ -126,17 +121,17 @@ pub fn derive_service_uri(input: proc_macro::TokenStream) -> proc_macro::TokenSt
             std::env::var(query_env).unwrap_or_else(|_| String::from(#default_query))
           };
 
-          match (std::env::var(password_env), query.is_empty()) {
-            (Ok(password), true) =>  format!(
-              "{}://{}:{}@{}:{}{}",
-              scheme, username, password, host, port, path
+          match (userinfo.is_empty(), query.is_empty()) {
+            (false, true) =>  format!(
+              "{}://{}@{}:{}{}",
+              scheme, userinfo, host, port, path
             ),
-            (Ok(password), false) => format!(
-              "{}://{}:{}@{}:{}{}?{}",
-              scheme, username, password, host, port, path, query
+            (false, false) => format!(
+              "{}://{}@{}:{}{}?{}",
+              scheme, userinfo, host, port, path, query
             ),
-            (Err(_), true) => format!("{}://{}:{}{}", scheme, host, port, path),
-            (Err(_), false) => format!("{}://{}:{}{}?{}", scheme, host, port, path, query)
+            (true, true) => format!("{}://{}:{}{}", scheme, host, port, path),
+            (true, false) => format!("{}://{}:{}{}?{}", scheme, host, port, path, query)
           }
         });
 
