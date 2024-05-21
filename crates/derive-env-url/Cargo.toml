@@ -13,8 +13,8 @@ doctest = false
 proc-macro = true
 
 [dependencies]
-darling = "0.14.1"
+darling = "0.20"
 proc-macro2 = "1"
 quote = "1"
-syn = { version = "1", features = [] }
-url = "2.2.2"
+syn = { version = "2", features = [] }
+url = "2.5"

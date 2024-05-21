@@ -3,7 +3,6 @@ extern crate syn;
 
 use darling::{FromDeriveInput, FromMeta};
 use quote::quote;
-use std::vec;
 use syn::{parse_macro_input, DeriveInput, Lit};
 use url::Url;
 

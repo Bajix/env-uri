@@ -13,8 +13,8 @@ repository = "https://github.com/Bajix/env-url/"
 
 [dependencies]
 derive-env-url = { version = "2.0.3", path = "../derive-env-url" }
-url = "2.2.2"
+url = "2.5"
 
 [dev-dependencies]
-ctor = "0.1.22"
+ctor = "0.2.8"
 
